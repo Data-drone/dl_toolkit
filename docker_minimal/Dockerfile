@@ -1,4 +1,4 @@
-FROM datadrone/deeplearn_base
+FROM datadrone/deeplearn_base:cuda-9.2
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
