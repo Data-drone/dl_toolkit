@@ -299,4 +299,4 @@ EXPOSE 8989
 COPY run_jupyter.sh /run_jupyter.sh
 RUN chown root:root /run_jupyter.sh
 RUN chmod 775 /run_jupyter.sh
-CMD ["jupyter lab --ip=0.0.0.0 --allow-root"]
+CMD ["run_jupyter.sh"]
