@@ -192,6 +192,7 @@ RUN cd ~/ && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
         -DWITH_QT=ON \
         -DWITH_OPENGL=ON \
+        -DBUILD_OPENCV_PYTHON=ON \
         -D WITH_CUDA=ON \
         -D CUDA_CUDA_LIBRARY=/usr/local/cuda/lib64/stubs/libcuda.so \
         -D ENABLE_FAST_MATH=1 \
@@ -299,4 +300,4 @@ EXPOSE 8989
 COPY run_jupyter.sh /run_jupyter.sh
 RUN chown root:root /run_jupyter.sh
 RUN chmod 775 /run_jupyter.sh
-CMD ["run_jupyter.sh"]
+ENTRYPOINT ["/run_jupyter.sh"]
