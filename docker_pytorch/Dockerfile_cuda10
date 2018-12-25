@@ -1,0 +1,8 @@
+FROM datadrone/deeplearn_opencv:cuda10.0_opencv4
+
+LABEL maintainer="Brian Law <bpl.law@gmail.com>"
+
+RUN conda install -y numpy scipy matplotlib pandas scikit-learn
+RUN conda install -y pytorch torchvision cuda100 -c pytorch
+RUN conda install -y -c pytorch -c fastai fastai
+
