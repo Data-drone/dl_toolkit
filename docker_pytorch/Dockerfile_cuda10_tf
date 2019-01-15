@@ -8,7 +8,7 @@ RUN apt install -y curl && \
     apt-get -y install openjdk-8-jdk
 
 # Bazel install
-ENV BAZEL_VERSION="0.18.0"
+ENV BAZEL_VERSION="0.15.0"
 RUN apt-get install -y pkg-config zip g++ zlib1g-dev unzip && \
     wget https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh && \
     chmod +x bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh && \
@@ -28,4 +28,26 @@ RUN git clone https://github.com/tensorflow/tensorflow.git && \
     cd tensorflow && \
     git checkout ${TF_VERSION}
 
+COPY build_tf.sh /opt/build_tf.sh
+
+RUN chmod +x build_tf.sh && \
+    ./build_tf.sh
+
+#ENV PYTHON_BIN_PATH=${CONDA_DIR}"/bin/python"
+#ENV PYTHON_LIB_PATH=${CONDA_DIR}"/lib/python3.6/site-packages"
+#ENV PYTHON_BIN_PATH="/opt/conda/bin/python"
+#ENV PYTHON_LIB_PATH="/opt/conda/lib/python3.6/site-packages"
+#ENV TF_NEED_CUDA="1"
+#ENV TF_CUDA_VERSION="10.0"
+#ENV CUDA_TOOLKIT_PATH="/usr/local/cuda"
+#ENV TF_CUDNN_VERSION="7.3"
+#ENV CUDCUDNN_INSTALL_PATH="/usr/local/cuda"
+#ENV TF_CUDA_COMPUTE_CAPABILITIES="7.5"
+#ENV TF_NCCL_VERSION="2.3"
+
+#RUN bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
+
 USER $NB_USER
+WORKDIR $HOME
+
+#RUN pip install /tmp/tensorflow_pkg/tensorflow-${TF_VERSION}.whl
