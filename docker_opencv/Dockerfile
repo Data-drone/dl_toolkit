@@ -1,8 +1,10 @@
-FROM datadrone/deeplearn_minimal
+FROM datadrone/deeplearn_minimal:cuda-9.2
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn
+# C++ Jupyter kernel for interfacing with opencv
+RUN conda install -y xeus -c QuantStack
 
 USER root
 
@@ -62,8 +64,7 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   .. \ 
 && make install
 
-RUN rm /opt/${OPENCV_VERSION}.zip \
-&& rm -r /opt/opencv-${OPENCV_VERSION}
+RUN rm /opt/${OPENCV_VERSION}.zip
 
 WORKDIR $HOME
 

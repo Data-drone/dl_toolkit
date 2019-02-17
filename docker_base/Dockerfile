@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.0-cudnn7-devel
+FROM nvidia/cuda:9.2-cudnn7-devel
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
