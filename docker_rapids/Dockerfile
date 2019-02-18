@@ -9,7 +9,8 @@ RUN apt -y install libopenblas-base libomp-dev && \
     conda install -y -c anaconda cudatoolkit && \
     conda install -y seaborn && \
     conda install -y -c nvidia/label/cuda10.0 -c rapidsai/label/cuda10.0 -c numba -c conda-forge -c defaults cudf && \
-    conda install -y -c nvidia/label/cuda10.0 -c rapidsai/label/cuda10.0 -c conda-forge -c pytorch -c defaults cuml
+    conda install -y -c nvidia/label/cuda10.0 -c rapidsai/label/cuda10.0 -c conda-forge -c pytorch -c defaults cuml && \
+    pip install -y xgboost
 
 WORKDIR $HOME
 
