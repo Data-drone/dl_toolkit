@@ -7,34 +7,7 @@ USER root
 RUN apt install -y curl && \
     apt-get -y install openjdk-8-jdk
 
-# Bazel install
-ENV BAZEL_VERSION="0.15.0"
-RUN apt-get install -y pkg-config zip g++ zlib1g-dev unzip && \
-    wget https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh && \
-    chmod +x bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh && \
-    ./bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh && \
-    echo 'export PATH="$PATH:$HOME/bin"' >> ~/.bashrc
-
-# install n build tf
-ENV TF_VERSION="r1.12"
-ENV TF_INSTALL_VERSION="1.12.0"
-
-USER $NB_USER
-RUN pip install -U keras_applications==1.0.6 --no-deps && \
-    pip install -U keras_preprocessing==1.0.5 --no-deps
-
-USER root
-WORKDIR /opt
-RUN git clone https://github.com/tensorflow/tensorflow.git && \
-    cd tensorflow && \
-    git checkout ${TF_VERSION}
-
-COPY build_tf.sh /opt/build_tf.sh
-
-RUN chmod +x build_tf.sh && \
-    ./build_tf.sh
+RUN conda install -y tensorflow-gpu
 
 USER $NB_USER
 WORKDIR $HOME
-
-RUN pip install /opt/tensorflow/pip/tensorflow_pkg/tensorflow-${TF_INSTALL_VERSION}-cp36-cp36m-linux_x86_64.whl
