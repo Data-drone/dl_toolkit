@@ -1,11 +1,10 @@
-FROM datadrone/deeplearn_pytorch:cuda10.0_opencv4.0.0
+FROM datadrone/deeplearn_opencv:cuda-10.1_opencv-4.1.1-jdk
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 USER root
 
-RUN apt install -y curl && \
-    apt-get -y install openjdk-8-jdk
+RUN apt install -y curl 
 
 RUN conda install -y tensorflow-gpu
 
