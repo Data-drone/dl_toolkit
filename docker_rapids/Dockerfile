@@ -4,6 +4,7 @@ LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 USER root
 
+# TODO update to latest rapids
 RUN apt -y install libopenblas-base libomp-dev && \
     conda install -y -c pytorch faiss-gpu cuda100 && \
     conda install -y -c anaconda cudatoolkit && \
