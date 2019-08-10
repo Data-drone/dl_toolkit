@@ -2,19 +2,33 @@ FROM datadrone/deeplearn_opencv:cuda-10.1_opencv-4.1.1
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
+# update to compile for cuda
 RUN conda install -y numpy scipy matplotlib pandas scikit-learn
-RUN conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch
-# currently broken
-#RUN conda install -y -c fastai fastai
+
+ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
+RUN conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing && \
+    conda install -c pytorch magma-cuda101
+
+WORKDIR /opt
+
+ENV TORCH_CUDA_ARCH_LIST=7.5
+
+RUN git clone --recursive https://github.com/pytorch/pytorch && \
+    cd pytorch && \
+    git checkout tags/v1.2.0 && \
+    python setup.py install
+
+RUN pip install --no-deps torchvision && \
+    pip install fastai
 
 # Dali plugin
 RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/cuda/10.0 nvidia-dali
 
+# need to wait till pytorch is compiled with cuda 10.1
 WORKDIR /opt
 RUN git clone https://github.com/NVIDIA/apex && \
     cd apex && \
     pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
-
 
 WORKDIR $HOME
 
