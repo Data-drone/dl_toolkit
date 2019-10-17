@@ -1,0 +1,10 @@
+FROM datadrone/deeplearn_pytorch:latest
+
+LABEL maintainer="Brian Law <bpl.law@gmail.com>"
+
+USER root
+
+RUN pip install tensorflow-gpu
+
+USER $NB_USER
+WORKDIR $HOME

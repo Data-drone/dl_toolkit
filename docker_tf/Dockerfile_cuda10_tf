@@ -6,7 +6,7 @@ USER root
 
 RUN apt install -y curl 
 
-RUN conda install -y tensorflow-gpu
+RUN conda install -y tensorflow-gpu #redo
 
 USER $NB_USER
 WORKDIR $HOME
