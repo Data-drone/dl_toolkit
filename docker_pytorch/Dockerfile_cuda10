@@ -15,8 +15,10 @@ ENV TORCH_CUDA_ARCH_LIST=7.5
 
 RUN git clone --recursive https://github.com/pytorch/pytorch && \
     cd pytorch && \
-    git checkout tags/v1.2.0 && \
+    git checkout tags/v1.3.0 && \
     python setup.py install
+
+RUN conda install -c pytorch captum
 
 WORKDIR /opt
 
