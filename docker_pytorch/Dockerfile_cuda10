@@ -18,7 +18,16 @@ RUN git clone --recursive https://github.com/pytorch/pytorch && \
     git checkout tags/v1.3.0 && \
     python setup.py install
 
-RUN conda install -c pytorch captum
+WORKDIR /opt
+
+#RUN conda install -c pytorch captum
+ENV BUILD_INSIGHTS=1
+
+RUN conda install -c conda-forge yarn && \
+    git clone https://github.com/pytorch/captum.git && \
+    cd captum && \
+    git checkout tags/v0.1.0 && \
+    python setup.py develop
 
 WORKDIR /opt
 
