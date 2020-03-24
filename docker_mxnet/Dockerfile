@@ -8,4 +8,4 @@ RUN conda install -y numpy scipy matplotlib pandas scikit-learn
 ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 RUN conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
 
-RUN pip install -y mxnet-cu101
+RUN pip install mxnet-cu101 gluonts
