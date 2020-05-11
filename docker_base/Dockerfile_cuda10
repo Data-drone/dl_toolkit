@@ -113,7 +113,8 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-RUN pip install nbdev
+RUN pip install nbdev && \
+    conda install --yes xeus-python -c conda-forge
 
 EXPOSE 8888
 
