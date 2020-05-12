@@ -1,4 +1,4 @@
-FROM datadrone/deeplearn_minimal:cuda-10.1
+FROM datadrone/deeplearn_minimal:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
@@ -41,7 +41,7 @@ RUN apt-get -y install libprotobuf-dev protobuf-compiler && \
 WORKDIR /opt
 
 # build opencv
-ENV OPENCV_VERSION="4.2.0"
+ENV OPENCV_VERSION="4.3.0"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && wget -O opencv_contrib.zip  https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
@@ -54,8 +54,11 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DBUILD_opencv_java=OFF \
   -DBUILD_OPENCV_PYTHON=ON \
   -DWITH_CUDA=ON \
+  -D WITH_CUDNN=ON \
+  -D OPENCV_DNN_CUDA=ON \
   -DCUDA_FAST_MATH=ON \
   -DCUDA_ARCH_BIN=7.5 \
+  -D WITH_CUBLAS=1 \
   -DOPENCV_ENABLE_NONFREE=ON \
   -DENABLE_FAST_MATH=1 \
   -DWITH_OPENGL=ON \
