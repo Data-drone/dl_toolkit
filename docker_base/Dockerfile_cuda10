@@ -66,7 +66,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Install conda as jovyan and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION=4.8.2 \
     MINICONDA_MD5=87e77f097f6ebb5127c77662dfc3165e \
-    CONDA_VERSION=4.8.2
+    CONDA_VERSION=4.6.14
 
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
