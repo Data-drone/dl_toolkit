@@ -2,9 +2,11 @@ FROM datadrone/deeplearn_minimal:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
-RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn
+# add mkl since pytorch uses it
+RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn mkl
 # C++ Jupyter kernel for interfacing with opencv
-RUN conda install -y xeus-cling -c conda-forge
+# removes mkl
+#RUN conda install -y xeus-cling -c conda-forge
 
 USER root
 
