@@ -1,4 +1,4 @@
-FROM datadrone/deeplearn_opencv:cuda-10.1_opencv-4.3.0
+FROM datadrone/deeplearn_opencv:cuda-10.2_opencv-4.3.0
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
@@ -26,7 +26,7 @@ WORKDIR /opt
 
 ENV TORCH_CUDA_ARCH_LIST=7.5
 ENV FORCE_CUDA=1
-RUN conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
+RUN conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
 
 #RUN git clone --recursive https://github.com/pytorch/pytorch && \
 #    cd pytorch && \
@@ -37,12 +37,13 @@ RUN conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 
 WORKDIR /opt
 
-RUN conda install -c pytorch captum
-#RUN conda install -c conda-forge yarn && \
-#    git clone https://github.com/pytorch/captum.git && \
-#    cd captum && \
-#    git checkout tags/v0.2.0 && \
-#    pip install -e .[insights]
+#RUN conda install -c pytorch captum
+# need to do manual in order to make sure that we don't change pytorch versions
+RUN conda install -c conda-forge yarn && \
+    git clone https://github.com/pytorch/captum.git && \
+    cd captum && \
+    git checkout tags/v0.2.0 && \
+    pip install -e .[insights]
 
 WORKDIR /opt
 
