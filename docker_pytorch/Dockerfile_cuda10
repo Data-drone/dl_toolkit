@@ -37,12 +37,12 @@ RUN conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 
 WORKDIR /opt
 
-RUN conda install -c pytorch captum
-#RUN conda install -c conda-forge yarn && \
-#    git clone https://github.com/pytorch/captum.git && \
-#    cd captum && \
-#    git checkout tags/v0.2.0 && \
-#    pip install -e .[insights]
+#RUN conda install -c pytorch captum
+RUN conda install -c conda-forge yarn && \
+    git clone https://github.com/pytorch/captum.git && \
+    cd captum && \
+    git checkout tags/v0.2.0 && \
+    pip install -e .[insights]
 
 WORKDIR /opt
 
