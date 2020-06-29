@@ -1,7 +1,6 @@
 # DL Toolkit
 
-Some setups for learning deep learning
-and exploring AI. See: 
+Some docker containers for experimenting with deep learning. 
 
 # Docker Base
 
@@ -31,5 +30,8 @@ This is docker OpenCV plus pytorch
 
 # Docker TF
 
-This is docker OpenCV plus TF
+This is docker OpenCV plus TensorFlow
 
+# Docker Rapids
+
+This adds in the Nvidia RAPIDS ai libraries
