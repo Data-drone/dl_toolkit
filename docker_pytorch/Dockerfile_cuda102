@@ -72,7 +72,7 @@ RUN pip install wandb pytorch-lightning && \
     pip install six numpy scipy Pillow matplotlib scikit-image imageio && \
     pip install --no-dependencies imgaug && \
     pip install PyYAML && \
-    pip install --no-dependencies ablumentations
+    pip install --no-dependencies albumentations
 
 
 WORKDIR $HOME
