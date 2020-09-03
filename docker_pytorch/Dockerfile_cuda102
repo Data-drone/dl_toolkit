@@ -1,4 +1,4 @@
-FROM datadrone/deeplearn_opencv:cuda-10.2_opencv-4.3.0
+FROM datadrone/deeplearn_opencv:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
@@ -59,9 +59,10 @@ WORKDIR /opt
 # RUN conda install -c pytorch -c fastai fastai
 
 # Dali plugin
-RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/cuda/10.0 nvidia-dali
+RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda100
 
 # need to wait till pytorch is compiled with cuda 10.1
+# Apex is going to be deprecated should move to pytorch apex
 WORKDIR /opt
 RUN git clone https://github.com/NVIDIA/apex && \
     cd apex && \

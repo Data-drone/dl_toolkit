@@ -1,4 +1,4 @@
-FROM datadrone/deeplearn_base:cuda-10.2_nbdev
+FROM datadrone/deeplearn_base:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.16.5 \
-    CMAKE_MAJOR=3.16
+ENV CMAKE_VERSION=3.18.2 \
+    CMAKE_MAJOR=3.18
 
 WORKDIR /opt/
 RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \
