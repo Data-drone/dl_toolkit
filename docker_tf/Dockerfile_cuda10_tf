@@ -11,9 +11,9 @@ RUN apt -y install nodejs && \
 RUN npm install -g @bazel/bazelisk
 
 ## test updating dependencies
-RUN pip install -U --user pip six 'numpy<1.19.0' wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions && \
-    pip install -U --user keras_applications --no-deps && \
-    pip install -U --user keras_preprocessing --no-deps
+RUN pip install -U pip six 'numpy<1.19.0' wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions && \
+    pip install -U keras_applications --no-deps && \
+    pip install -U keras_preprocessing --no-deps
 
 ## Add in TF repo
 
@@ -50,8 +50,17 @@ ENV CC_OPT_FLAGS='-march=native -Wno-sign-compare'
 
 RUN ./configure
 
-# TF 2 config
-RUN bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
+# TF 2 config - do I need?  --config=opt --config=cuda 
+RUN bazel build //tensorflow/tools/pip_package:build_pip_package
+
+RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+
+# something weird is going on with this...
+RUN rm -rf /opt/conda/lib/python3.8/site-packages/numpy-1.19.1.dist-info/
+
+RUN pip install --upgrade /tmp/tensorflow_pkg/tensorflow-*.whl
+
+
 
 USER $NB_USER
 WORKDIR $HOME
