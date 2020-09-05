@@ -10,6 +10,11 @@ RUN apt -y install nodejs && \
 
 RUN npm install -g @bazel/bazelisk
 
+## test updating dependencies
+RUN pip install -U --user pip six 'numpy<1.19.0' wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions && \
+    pip install -U --user keras_applications --no-deps && \
+    pip install -U --user keras_preprocessing --no-deps
+
 ## Add in TF repo
 
 WORKDIR /opt
@@ -46,7 +51,7 @@ ENV CC_OPT_FLAGS='-march=native -Wno-sign-compare'
 RUN ./configure
 
 # TF 2 config
-RUN bazel build //tensorflow/tools/pip_package:build_pip_package
+RUN bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
 
 USER $NB_USER
 WORKDIR $HOME
