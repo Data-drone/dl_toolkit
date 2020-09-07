@@ -19,6 +19,13 @@ docker tag $IMAGE_NAME "$BASE_NAME:${HUB_VERSION_TAG%%\r}"
 CUDA_VERSION_TAG="cuda-$(docker run --rm -a STDOUT ${IMAGE_NAME} cat /usr/local/cuda/version.txt | awk '{print $NF}'  | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 
+docker push "$IMAGE_NAME"
+docker push "$BASE_NAME:$PY_VERSION_TAG"
+docker push "$BASE_NAME:${NB_VERSION_TAG%% }"
+docker push "$BASE_NAME:${LAB_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${HUB_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
+
 cd ..
 
 # Minimal
@@ -33,6 +40,9 @@ docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 CMAKE_TAG="cmake-$(docker run --rm -a STDOUT ${IMAGE_NAME} echo $CMAKE_VRESION  | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${CMAKE_TAG%%\r}"
 
+docker push "$IMAGE_NAME"
+docker push "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${CMAKE_TAG%%\r}"
 
 cd ..
 
@@ -47,6 +57,10 @@ docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 OPENCV_TAG="opencv-$(docker run --rm -a STDOUT ${IMAGE_NAME} echo $OPENCV_VERSION  | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${OPENCV_TAG%%\r}"
 
+docker push "$IMAGE_NAME"
+docker push "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${OPENCV_TAG%%\r}"
+
 cd ..
 
 # PyTorch
@@ -60,6 +74,9 @@ docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 PYTORCH_TAG="pytorch-$(docker run --rm -a STDOUT ${IMAGE_NAME} python -c "import torch; print(torch.__version__)" | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${PYTORCH_TAG%%\r}"
 
+docker push "$IMAGE_NAME"
+docker push "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${PYTORCH_TAG%%\r}"
 
 cd ..
 
@@ -74,5 +91,9 @@ docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 TENSORFLOW_TAG="tensorflow-$(docker run --rm -a STDOUT ${IMAGE_NAME} python -c "import tensorflow; print(tensorflow.__version__)" | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${TENSORFLOW_TAG%%\r}"
 
-cd ..
+docker push "$IMAGE_NAME"
+docker push "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
+docker push "$BASE_NAME:${TENSORFLOW_TAG%%\r}"
 
+
+cd ..
