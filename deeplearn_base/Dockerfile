@@ -1,4 +1,6 @@
-FROM nvidia/cuda:10.2-cudnn7-devel
+ARG BASE_CONTAINER=nvidia/cuda:10.2-cudnn7-devel 
+
+FROM $BASE_CONTAINER
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 ARG NB_USER="jovyan"
