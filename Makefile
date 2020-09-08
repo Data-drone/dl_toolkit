@@ -17,7 +17,7 @@ help: ### Help Text
 # but the bash script does cd in...
 # remove the bash scripts and go fully into using the make?
 build/%:
-	docker build -t $(OWNER)/$(notdir $@) ./$(notdir $@)
+	docker build -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 
 build-all: ## Build the Dockerfiles
 	for folder in ${ALL_IMAGES}; do \
