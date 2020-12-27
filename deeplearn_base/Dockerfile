@@ -14,6 +14,7 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
+    apt-utils \
     wget \
     bzip2 \
     ca-certificates \
@@ -67,7 +68,7 @@ RUN mkdir /home/$NB_USER/work && \
 
 # Install conda as jovyan and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION=4.9.2 \
-    MINICONDA_MD5=d63adf39f2c220950a063e0529d4ff74 \
+    MINICONDA_MD5=122c8c9beb51e124ab32a0fa6426c656 \
     CONDA_VERSION=4.9.2
 
 WORKDIR /tmp
