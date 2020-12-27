@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=nvidia/cuda:10.2-cudnn7-devel 
+ARG BASE_CONTAINER=nvidia/cuda:11.1-cudnn8-devel 
 
 FROM $BASE_CONTAINER
 
@@ -66,9 +66,9 @@ RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
 # Install conda as jovyan and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION=4.8.3 \
+ENV MINICONDA_VERSION=4.9.2 \
     MINICONDA_MD5=d63adf39f2c220950a063e0529d4ff74 \
-    CONDA_VERSION=4.8.3
+    CONDA_VERSION=4.9.2
 
 WORKDIR /tmp
 RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py38_${MINICONDA_VERSION}-Linux-x86_64.sh && \
@@ -104,9 +104,9 @@ RUN conda install --quiet --yes 'tini=0.18.0' && \
 # Do all this in a single RUN command to avoid duplicating all of the
 # files across image layers when the permissions change
 RUN conda install --quiet --yes \
-    'notebook=6.1.3' \
-    'jupyterhub=1.1.0' \
-    'jupyterlab=2.2.5' && \
+    'notebook=6.1.5' \
+    'jupyterhub=1.3.0' \
+    'jupyterlab=3.0.0' && \
     conda clean --all -f -y && \
     npm cache clean --force && \
     jupyter notebook --generate-config && \

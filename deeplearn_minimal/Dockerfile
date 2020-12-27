@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.18.2 \
-    CMAKE_MAJOR=3.18
+ENV CMAKE_VERSION=3.19.2 \
+    CMAKE_MAJOR=3.19
 
 WORKDIR /opt/
 RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \

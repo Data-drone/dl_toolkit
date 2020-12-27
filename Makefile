@@ -3,8 +3,7 @@
 SHELL:=bash
 
 ALL_IMAGES:=deeplearn_base \
-		deeplearn_minimal \
-		deeplearn_mxnet
+		deeplearn_minimal 
 
 OWNER:=datadrone
 

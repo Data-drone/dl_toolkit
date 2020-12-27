@@ -1,6 +1,15 @@
 # DL Toolkit
 
-Some docker containers for experimenting with deep learning. 
+Some docker containers for experimenting with deep learning.
+
+# Building:
+
+```{bash}
+
+# build all the images listed in ALL_IMAGES
+make build-all
+
+```
 
 # Deeplearn Base
 
