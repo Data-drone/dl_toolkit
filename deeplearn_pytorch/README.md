@@ -11,7 +11,3 @@ new instructions for latest docker:
 
 add cameras:
 `docker run --privileged --device=/dev/video0:/dev/video0 --gpus all -d -it -p 8989:8888 -e JUPYTER_ENABLE_LAB=yes -v /home/brian/Workspace:/home/jovyan/work --ipc=host -v /media/brian/extra_1:/home/jovyan/work/external_data datadrone/deeplearn_pytorch:latest`
-
-## Known Issues
-affects latest version
-torchvision is not compiled properly with CUDA need to redo the setup routine to force CUDA compile
