@@ -7,27 +7,23 @@ USER root
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     build-essential \
-    emacs \
+    vim-tiny \
     git \
     inkscape \
-    jed \
     libsm6 \
     libxext-dev \
     libxrender1 \
     lmodern \
     netcat \
-    pandoc \
-    python-dev \
-    texlive-fonts-extra \
-    texlive-fonts-recommended \
-    texlive-generic-recommended \
-    texlive-latex-base \
-    texlive-latex-extra \
+    # ---- nbconvert dependencies ----
     texlive-xetex \
+    texlive-fonts-recommended \
+    texlive-plain-generic \
+    # ----
+    tzdata \
     unzip \
-    nano \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    nano-tiny \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # cmake needed for some c++ tools
 ENV CMAKE_VERSION=3.19.2 \
