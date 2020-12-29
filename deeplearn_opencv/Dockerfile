@@ -3,9 +3,9 @@ FROM datadrone/deeplearn_minimal:latest
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 # add mkl since pytorch uses it
-RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn mkl
+RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn mkl 
 # C++ Jupyter kernel for interfacing with opencv
-# removes mkl
+# triggers a lot of compatability issues
 #RUN conda install -y xeus-cling -c conda-forge
 
 USER root
@@ -51,7 +51,7 @@ RUN apt-get -y install libprotobuf-dev protobuf-compiler && \
 WORKDIR /opt
 
 # build opencv
-ENV OPENCV_VERSION="4.4.0"
+ENV OPENCV_VERSION="4.5.1"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && wget -O opencv_contrib.zip  https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
