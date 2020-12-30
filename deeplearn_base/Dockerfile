@@ -126,6 +126,7 @@ RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${m
 RUN conda install --quiet --yes \
     'notebook=6.1.6' \
     'jupyterhub=1.3.0' \
+    'nb_conda_kernels' \
     'jupyterlab=3.0.0' && \
     conda clean --all -f -y && \
     npm cache clean --force && \
@@ -145,6 +146,7 @@ CMD ["start-notebook.sh"]
 COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
 # Need to have both files to be able to use classic and lab
 COPY jupyter_notebook_config.py jupyter_server_config.py /etc/jupyter/
+
 # Fix permissions on /etc/jupyter as root
 USER root
 RUN fix-permissions /etc/jupyter/
