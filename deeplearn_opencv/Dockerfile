@@ -2,8 +2,10 @@ FROM datadrone/deeplearn_minimal:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
-# add mkl since pytorch uses it
-RUN conda install -y numpy scipy matplotlib scikit-image scikit-learn mkl 
+USER $NB_USER 
+
+RUN conda create --name computer_vision python=3.8 ipykernel numpy scipy matplotlib scikit-image scikit-learn openblas
+SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
 # C++ Jupyter kernel for interfacing with opencv
 # triggers a lot of compatability issues
 #RUN conda install -y xeus-cling -c conda-forge
@@ -83,8 +85,8 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DOPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib-${OPENCV_VERSION}/modules \
   -DBUILD_opencv_python2=OFF \
   -DCMAKE_INSTALL_PREFIX=$(python3 -c "import sys; print(sys.prefix)") \
-  -DPYTHON_EXECUTABLE=/opt/conda/bin/python  \
-  -DPYTHON_DEFAULT_EXECUTABLE=$(which python) \
+  -DPYTHON_EXECUTABLE=$(which python)  \
+  -DPYTHON_DEFAULT_EXECUTABLE=/opt/conda/envs/computer_vision/bin/python \
   .. \ 
 && make install -j8
 

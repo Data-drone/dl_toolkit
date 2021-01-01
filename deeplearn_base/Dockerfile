@@ -127,7 +127,7 @@ RUN conda install --quiet --yes \
     'notebook=6.1.6' \
     'jupyterhub=1.3.0' \
     'nb_conda_kernels' \
-    'jupyterlab=3.0.0' && \
+    'jupyterlab=2.2.9' && \
     conda clean --all -f -y && \
     npm cache clean --force && \
     jupyter notebook --generate-config && \

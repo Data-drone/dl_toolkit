@@ -2,37 +2,21 @@ FROM datadrone/deeplearn_opencv:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
-# update to compile for cuda
-# done already in opencv book
-# RUN conda install -y numpy scipy matplotlib pandas scikit-learn
-
-
-#ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
-#RUN conda install pyyaml mkl mkl-include setuptools cffi typing 
-    #&& \
-    #conda install -c pytorch magma-cuda101
-
-# fix for https://github.com/conda/conda/issues/9367
-#RUN conda config --add channels defaults && \
-#    conda config --add channels conda-forge && \
-#    conda config --add channels pytorch && \
-#    conda config --add channels fastai
-
-# fixed in base notebook
-#RUN conda config --set allow_conda_downgrades true && \
-#    conda install conda=4.6.14
-
 WORKDIR /opt
+USER root
 
 ENV TORCH_CUDA_ARCH_LIST=7.5
 ENV FORCE_CUDA=1
 #RUN conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
-#RUN conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
+RUN conda install -n computer_vision -y magma-cuda111 -c pytorch 
+#RUN conda install -n computer_vision pytorch cudatoolkit>=11 -c pytorch
 
 # need to add in magma  
 # added test for enabling opencv integration
-RUN conda install -y magma-cuda111 -c pytorch 
 
+SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
+
+RUN echo "conda activate computer_vision"
 ENV CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 RUN git clone --recursive https://github.com/pytorch/pytorch && \
     cd pytorch && \
@@ -41,12 +25,13 @@ RUN git clone --recursive https://github.com/pytorch/pytorch && \
     git submodule update --init --recursive && \
     USE_OPENCV=1 python setup.py install
 
-WORKDIR /opt
+
 
 #RUN conda install -c pytorch captum
 # need to do manual in order to make sure that we don't change pytorch versions
-RUN conda install -c conda-forge yarn && \
-    git clone https://github.com/pytorch/captum.git && \
+RUN conda install -n computer_vision -c conda-forge yarn
+
+RUN git clone https://github.com/pytorch/captum.git && \
     cd captum && \
     git checkout tags/v0.3.0 && \
     pip install -e .[insights]
@@ -56,11 +41,11 @@ WORKDIR /opt
 # issue with compiling with torch
 # need to debug compile with 0.5.0 
 
-#RUN conda install torchvision -c pytorch
-#RUN git clone https://github.com/pytorch/vision.git && \
-#    cd vision && \
-#    git checkout tags/v0.5.0 && \
-#    python setup.py install
+#RUN conda install -n computer_vision torchvision -c pytorch
+RUN git clone https://github.com/pytorch/vision.git && \
+    cd vision && \
+    git checkout tags/v0.8.2 && \
+    python setup.py install
 
 # RUN conda install -c pytorch -c fastai fastai
 
@@ -75,8 +60,9 @@ WORKDIR /opt
 #    pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
 
 # install lightning and loggers and ablumentations
+# removed numpy and scipy as they should be there already
 RUN pip install wandb pytorch-lightning && \
-    pip install six numpy scipy Pillow matplotlib scikit-image imageio && \
+    pip install six Pillow matplotlib scikit-image imageio && \
     pip install --no-dependencies imgaug && \
     pip install PyYAML && \
     pip install --no-dependencies albumentations
