@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.19.2 \
+ENV CMAKE_VERSION=3.19.5 \
     CMAKE_MAJOR=3.19
 
 WORKDIR /opt/

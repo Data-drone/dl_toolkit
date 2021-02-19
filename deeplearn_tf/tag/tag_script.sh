@@ -4,7 +4,7 @@ set -e
 IMAGE_NAME=$1
 BASE_NAME=$2
 
-CUDA_VERSION_TAG="cuda-$(docker run --rm -a STDOUT ${IMAGE_NAME} cat /usr/local/cuda/version.txt | awk '{print $NF}'  | tr -d '\r')"
+CUDA_VERSION_TAG="cuda-$(docker run --rm -a STDOUT ${IMAGE_NAME} nvcc --version | grep "release" | awk '{print $6}' | cut -c2- | awk '{print $NF}'  | tr -d '\r' )"
 docker tag $IMAGE_NAME "$BASE_NAME:${CUDA_VERSION_TAG%%\r}"
 TENSORFLOW_TAG="tensorflow-$(docker run --rm -a STDOUT ${IMAGE_NAME} python -c "import tensorflow; print(tensorflow.__version__)" | tr -d '\r')"
 docker tag $IMAGE_NAME "$BASE_NAME:${TENSORFLOW_TAG%%\r}"
