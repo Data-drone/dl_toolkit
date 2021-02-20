@@ -3,7 +3,8 @@
 SHELL:=bash
 
 ALL_IMAGES:=deeplearn_base \
-		deeplearn_minimal 
+		deeplearn_minimal \
+		deeplearn_opencv
 
 OWNER:=datadrone
 
@@ -30,8 +31,14 @@ tag: ## Tag the Dockerfiles
 		./$$folder/tag/tag_script.sh $(OWNER)/$$folder:latest $(OWNER)/$$folder; \
 	done
 
+tag/%:
+	./$(notdir $@)/tag/tag_script.sh $(OWNER)/$(notdir $@):latest $(OWNER)/$(notdir $@);
+
 push: ## Push the Dockerfiles in
 	for folder in $(ALL_IMAGES); do \
 		echo "$(OWNER)/$$folder"; \
 		./$$folder/push/push_script.sh $(OWNER)/$$folder:latest $(OWNER)/$$folder; \
 	done
+
+push/%:
+	./$(notdir $@)/push/push_script.sh $(OWNER)/$(notdir $@):latest $(OWNER)/$(notdir $@);

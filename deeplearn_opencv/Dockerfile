@@ -88,7 +88,7 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DPYTHON_EXECUTABLE=$(which python)  \
   -DPYTHON_DEFAULT_EXECUTABLE=/opt/conda/envs/computer_vision/bin/python \
   .. \ 
-&& make install -j8
+&& make install -j48
 
 RUN rm /opt/${OPENCV_VERSION}.zip
 
