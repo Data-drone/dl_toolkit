@@ -11,7 +11,7 @@ RUN apt -y install nodejs && \
 RUN npm install -g @bazel/bazelisk
 
 ## test updating dependencies
-RUN pip install -U pip six 'numpy<1.19.0' wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions && \
+RUN pip install -U pip six numpy wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions && \
     pip install -U keras_applications --no-deps && \
     pip install -U keras_preprocessing --no-deps
 
@@ -23,7 +23,7 @@ RUN git clone https://github.com/tensorflow/tensorflow.git
 
 WORKDIR /opt/tensorflow
 
-RUN git checkout v2.3.0
+RUN git checkout tags/v2.4.1 -b r2.4
 
 # need search paths 
 # /usr/include for nccl
@@ -33,15 +33,15 @@ RUN git checkout v2.3.0
 
 # setting env variables for the compile
 # Missing Python / Python Lib / TensorRT / Cuda Compute version / nvcc / opt flag / android 
-ENV PYTHON_BIN_PATH=/opt/conda/bin/python3
+ENV PYTHON_BIN_PATH=/opt/conda/envs/computer_vision/bin/python
 ENV USE_DEFAULT_PYTHON_LIB_PATH=1
 ENV TF_NEED_OPENCL_SYCL=0
 ENV TF_NEED_ROCM=0
 ENV TF_NEED_CUDA=1
 ENV TF_NEED_TENSORRT=0
-ENV TF_CUDA_VERSION=10.2
-ENV TF_CUDNN_VERSION=7
-ENV TF_NCCL_VERSION=2.7.8
+ENV TF_CUDA_VERSION=11.2
+ENV TF_CUDNN_VERSION=8
+ENV TF_NCCL_VERSION=2.8.4
 ENV TF_CUDA_CLANG=0
 ENV TF_SET_ANDROID_WORKSPACE=0
 ENV TF_CUDA_COMPUTE_CAPABILITIES=7.5
@@ -56,7 +56,7 @@ RUN bazel build //tensorflow/tools/pip_package:build_pip_package
 RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 # something weird is going on with this...
-RUN rm -rf /opt/conda/lib/python3.8/site-packages/numpy-1.19.1.dist-info/
+#RUN rm -rf /opt/conda/lib/python3.8/site-packages/numpy-1.19.1.dist-info/
 
 RUN pip install --upgrade /tmp/tensorflow_pkg/tensorflow-*.whl
 

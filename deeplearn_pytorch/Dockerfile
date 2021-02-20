@@ -8,7 +8,7 @@ USER root
 ENV TORCH_CUDA_ARCH_LIST=7.5
 ENV FORCE_CUDA=1
 #RUN conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
-RUN conda install -n computer_vision -y magma-cuda111 -c pytorch 
+RUN conda install -n computer_vision -y magma-cuda112 -c pytorch 
 #RUN conda install -n computer_vision pytorch cudatoolkit>=11 -c pytorch
 
 # need to add in magma  
@@ -18,9 +18,10 @@ SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
 
 RUN echo "conda activate computer_vision"
 ENV CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+ENV USE_CUDA=1
 RUN git clone --recursive https://github.com/pytorch/pytorch && \
     cd pytorch && \
-    git checkout tags/v1.7.1 && \
+    git checkout tags/v1.7.1 -b release/1.7 && \
     git submodule sync && \
     git submodule update --init --recursive && \
     USE_OPENCV=1 python setup.py install
@@ -33,7 +34,7 @@ RUN conda install -n computer_vision -c conda-forge yarn
 
 RUN git clone https://github.com/pytorch/captum.git && \
     cd captum && \
-    git checkout tags/v0.3.0 && \
+    git checkout tags/v0.3.1 -b v0.3.1 && \
     pip install -e .[insights]
 
 WORKDIR /opt
@@ -44,7 +45,7 @@ WORKDIR /opt
 #RUN conda install -n computer_vision torchvision -c pytorch
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
-    git checkout tags/v0.8.2 && \
+    git checkout tags/v0.8.2 -b release/0.8.0 && \
     python setup.py install
 
 # RUN conda install -c pytorch -c fastai fastai
