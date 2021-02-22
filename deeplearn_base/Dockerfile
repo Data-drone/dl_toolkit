@@ -1,4 +1,5 @@
-ARG BASE_CONTAINER=nvidia/cuda:11.2.1-cudnn8-devel 
+ARG BASE_CONTAINER 
+#=nvidia/cuda:11.2.1-cudnn8-devel 
 
 FROM $BASE_CONTAINER
 
