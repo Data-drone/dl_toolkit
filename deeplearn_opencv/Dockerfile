@@ -14,7 +14,7 @@ USER root
 
 # essentials
 RUN apt-get update && \
-    apt-get -y install build-essential cmake unzip pkg-config
+    apt-get -y install unzip pkg-config
 
 # image and io libraries
 RUN apt-get -y install libjpeg-dev libpng-dev libtiff-dev && \
