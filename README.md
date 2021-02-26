@@ -36,8 +36,7 @@ Current compiled with opencv 4.4.0  with Compute Model 7.5
 
 # Deeplearn Pytorch
 
-This is docker OpenCV plus pytorch 1.6
-
+This is docker OpenCV plus pytorch 1.7
 # Deeplearn TF
 
 This is docker OpenCV plus TensorFlow 2.x

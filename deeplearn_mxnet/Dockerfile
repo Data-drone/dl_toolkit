@@ -19,31 +19,36 @@ RUN apt-get update && \
 ### Build MXNet
 RUN echo "conda activate computer_vision"
 #ENV CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+# There is a bug with THRUST_IGNORE_CUB_VERSION_CHECK with CUDA 11.x
+# Workaround requires editing a cuda.h file in order to make things work right
 RUN git clone --recursive https://github.com/apache/incubator-mxnet mxnet && \
     cd mxnet && \
-    git checkout tags/v1.8.0.rc3 -b 1.8.0
+    git checkout tags/1.8.0.rc3 -b 1.8.x
 #&& \
 
 ENV OpenCV_DIR=/opt/opencv-4.1.5/cmake_binary
 RUN mkdir /opt/mxnet/cmake_binary && \
     cd /opt/mxnet/cmake_binary \
-  && cmake -DUSE_CUDA=1 \
-    -DUSE_CUDNN=1 \
-    -DMXNET_CUDA_ARCH=7.5 \
-    -DUSE_OPENCV=1 \
-    -DUSE_NCCL=1 \
-    -DUSE_OPENMP=0 \
-    -DCMAKE_BUILD_TYPE=RELEASE \
+  && cmake -DCMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=$(python -c "import sys; print(sys.prefix)") \
+    -DUSE_CXX14_IF_AVAILABLE=ON \
+    -DUSE_CUDA=ON \
+    -DUSE_CUDNN=ON \
+    -DUSE_OPENMP=ON \
+    -DUSE_TVM_OP=OFF \
+    -DMXNET_CUDA_ARCH="7.5" \
+    -DUSE_OPENCV=OFF \
+    -DUSE_NCCL=ON \
+    -DUSE_SSE=ON \
     .. \
   && cmake --build . --parallel 8
-    # THRUST_IGNORE_CUB_VERSION_CHECK
+
+    # -GNinja
+    #-DUSE_CXX14_IF_AVAILABLE=1 \    
     #-DUSE_OPENCV_INC_PATH=/opt/conda/envs/computer_vision/include/opencv4 \
     #-DUSE_OPENCV_LIB_PATH=/opt/conda/envs/computer_vision/lib \
 
 
-# cmake USE_CUDA=1 USE_CUDNN=1 MXNET_CUDA_ARCH=7.5 USE_OPENCV=1 USE_NCCL=1 USE_OPENMP=0 CMAKE_BUILD_TYPE=RELEASE ..
-### cmake USE_CUDA=1 USE_CUDNN=1 MXNET_CUDA_ARCH=7.5 USE_OPENCV=1 USE_NCCL=1 USE_OPENCV_INC_PATH=/opt/conda/envs/computer_vision/include/opencv4 USE_OPENCV_LIB_PATH=/opt/conda/envs/computer_vision/lib ..
-# cmake USE_CUDA=1 USE_CUDNN=1 MXNET_CUDA_ARCH=7.5 USE_OPENCV=0 USE_NCCL=1 ..
 
 ### Install the python bindings
 
