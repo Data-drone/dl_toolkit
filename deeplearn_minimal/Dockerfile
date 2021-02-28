@@ -1,4 +1,7 @@
-FROM datadrone/deeplearn_base:latest
+ARG CUDA
+
+FROM datadrone/deeplearn_base:$CUDA
+#FROM datadrone/deeplearn_base:latest
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 

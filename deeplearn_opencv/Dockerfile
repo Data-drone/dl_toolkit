@@ -1,4 +1,6 @@
-FROM datadrone/deeplearn_minimal:latest
+ARG CUDA
+
+FROM datadrone/deeplearn_minimal:$CUDA
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
@@ -88,7 +90,7 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DPYTHON_EXECUTABLE=$(which python)  \
   -DPYTHON_DEFAULT_EXECUTABLE=/opt/conda/envs/computer_vision/bin/python \
   .. \ 
-&& make install -j48
+&& make install -j8
 
 RUN rm /opt/${OPENCV_VERSION}.zip
 
