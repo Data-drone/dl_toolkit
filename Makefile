@@ -54,11 +54,11 @@ build-base:
 #		docker build -t ${OWNER}/$$folder:latest ./$$folder; \
 #	done
 
-tag: ## Tag the Dockerfiles
-	for folder in $(ALL_IMAGES); do \
-		echo "$(OWNER)/$$folder"; \
-		./$$folder/tag/tag_script.sh $(OWNER)/$$folder:latest $(OWNER)/$$folder; \
-	done
+#tag: ## Tag the Dockerfiles
+#	for folder in $(ALL_IMAGES); do \
+#		echo "$(OWNER)/$$folder"; \
+#		./$$folder/tag/tag_script.sh $(OWNER)/$$folder:latest $(OWNER)/$$folder; \
+#	done
 
 tag/%:
 	./$(notdir $@)/tag/tag_script.sh $(OWNER)/$(notdir $@):latest $(OWNER)/$(notdir $@);
@@ -71,3 +71,7 @@ push: ## Push the Dockerfiles in
 
 push/%:
 	./$(notdir $@)/push/push_script.sh $(OWNER)/$(notdir $@):latest $(OWNER)/$(notdir $@);
+
+#test/%: ## run tests against a stack (only common tests or common tests + specific tests)
+#	@if [ ! -d "$(notdir $@)/test" ]; then TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test; \
+#	else TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test $(notdir $@)/test; fi
