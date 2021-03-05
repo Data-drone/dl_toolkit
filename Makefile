@@ -1,9 +1,9 @@
 .PHONY: help
 
 SHELL:=bash
-
-NVIDIA_BASE:=nvidia/cuda:11.0.3-devel-ubuntu20.04
-CUDA_TARGET:=cuda-11.0
+# docker pull nvidia/cuda:11.1.1-cudnn8-devel
+NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-devel
+CUDA_TARGET:=cuda-11.1
 
 OWNER:=datadrone
 
@@ -36,7 +36,7 @@ build-opencv:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_opencv:latest ./deeplearn_opencv
 
 build-base:
-	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:latest ./deeplearn_base
+	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:cuda-11.1 ./deeplearn_base
 
 
 #build/%:
