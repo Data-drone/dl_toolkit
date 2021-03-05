@@ -32,11 +32,11 @@ build-pytorch-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_pytorch/Dockerfile.build  -t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
 
 build-opencv: 
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_minimal:latest ./deeplearn_minimal
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_opencv:latest ./deeplearn_opencv
+	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
+	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
 
 build-base:
-	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:cuda-11.1 ./deeplearn_base
+	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET) ./deeplearn_base
 
 
 #build/%:
