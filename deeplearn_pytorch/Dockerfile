@@ -7,13 +7,13 @@ LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 WORKDIR /opt
 USER root
 
-RUN conda install -n computer_vision -y magma-cuda110 -c pytorch 
+RUN conda install -n computer_vision -y magma-cuda111 -c pytorch 
 # need to add in magma  
 
 SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
 
 RUN echo "conda activate computer_vision"
-RUN conda install -n computer_vision pytorch cudatoolkit=11.0 -c pytorch
+RUN conda install -n computer_vision pytorch cudatoolkit=11.1 -c pytorch -c conda-forge
 
 # need to do manual in order to make sure that we don't change pytorch versions
 RUN conda install -n computer_vision -c conda-forge yarn
@@ -31,13 +31,13 @@ WORKDIR /opt
 #RUN conda install -n computer_vision torchvision -c pytorch
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
-    git checkout tags/v0.8.2 -b release/0.8.0 && \
+    git checkout tags/v0.9.0 -b release/0.9 && \
     python setup.py install
 
 # RUN conda install -c pytorch -c fastai fastai
 
 # Dali plugin
-RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda110
+RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda111
 
 WORKDIR /opt
 

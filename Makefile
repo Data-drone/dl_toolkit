@@ -26,7 +26,7 @@ build-tf-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_tf/Dockerfile.build  -t $(OWNER)/deeplearn_tf:latest ./deeplearn_pytorch
 
 build-pytorch:
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
+	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET) ./deeplearn_pytorch
 
 build-pytorch-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_pytorch/Dockerfile.build  -t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
