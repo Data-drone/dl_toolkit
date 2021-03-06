@@ -37,7 +37,7 @@ RUN git clone https://github.com/pytorch/vision.git && \
 # RUN conda install -c pytorch -c fastai fastai
 
 # Dali plugin
-RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda111
+RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda110
 
 WORKDIR /opt
 
