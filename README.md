@@ -50,9 +50,7 @@ There were issues with compiling and there is no 1.8.x stable release on cuda 11
 
 # Docker Rapids
 
-This adds in the Nvidia RAPIDS ai libraries
-- Discontinued for now issues with conda configs and solver issues and Nvidia's official one works okay now
-
+This adds in the Nvidia RAPIDS.ai libraries 0.18 with dask dashboard for jupyter 3.0
 ## TODO
 
 Make the base image an arg?
