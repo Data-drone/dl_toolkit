@@ -55,7 +55,7 @@ RUN apt-get -y install libprotobuf-dev protobuf-compiler && \
 WORKDIR /opt
 
 # build opencv
-ENV OPENCV_VERSION="4.5.1"
+ENV OPENCV_VERSION="4.5.3"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && wget -O opencv_contrib.zip  https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
@@ -90,7 +90,7 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DPYTHON_EXECUTABLE=$(which python)  \
   -DPYTHON_DEFAULT_EXECUTABLE=/opt/conda/envs/computer_vision/bin/python \
   .. \ 
-&& make install -j8
+&& make install -j28
 
 RUN rm /opt/${OPENCV_VERSION}.zip
 
