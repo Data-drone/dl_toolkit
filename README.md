@@ -9,6 +9,10 @@ Some docker containers for experimenting with deep learning.
 # build all the images listed in ALL_IMAGES
 make build-all
 
+# build individual images:
+# check makefile for individual build strings
+make build-xxx  
+
 ```
 
 # Deeplearn Base
