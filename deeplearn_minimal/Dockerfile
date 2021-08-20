@@ -48,5 +48,10 @@ WORKDIR $HOME
 # Create alternative for nano -> nano-tiny
 RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 
+# Activate some jupyter extensions
+RUN conda install -n base -c conda-forge jupyterlab_widgets
+RUN jupyter labextension install @jupyterlab/celltags
+RUN pip install jupyterlab_nvdashboard
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID

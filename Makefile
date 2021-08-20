@@ -17,10 +17,10 @@ help: ### Help Text
 # remove the bash scripts and go fully into using the make?
 
 build-mxnet:
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_mxnet:latest ./deeplearn_mxnet
+	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_mxnet:$(CUDA_TARGET) ./deeplearn_mxnet
 
 build-tf:
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_tf:latest ./deeplearn_tf
+	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_tf:$(CUDA_TARGET) ./deeplearn_tf
 
 build-tf-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_tf/Dockerfile.build  -t $(OWNER)/deeplearn_tf:latest ./deeplearn_pytorch

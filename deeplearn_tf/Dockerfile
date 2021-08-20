@@ -1,6 +1,6 @@
 ARG CUDA
 
-FROM datadrone/deeplearn_opencv:$CUDA
+FROM datadrone/deeplearn_pytorch:$CUDA
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
