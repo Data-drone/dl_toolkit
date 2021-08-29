@@ -3,6 +3,7 @@
 SHELL:=bash
 # docker pull nvidia/cuda:11.1.1-cudnn8-devel
 NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-devel
+RUNTIME_NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-runtime
 CUDA_TARGET:=cuda-11.1
 
 OWNER:=datadrone
@@ -35,9 +36,18 @@ build-opencv:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
 
+#build-opencv-runtime:
+#	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET)-runtime ./deeplearn_minimal
+
+#docker build --build-arg CUDA=$(CUDA_TARGET)-runtime -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
+# docker-opencv-cv-base build
+# docker-opencv-multistage build
+
 build-base:
 	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET) ./deeplearn_base
 
+build-base-runtime:
+	docker build --build-arg BASE_CONTAINER=$(RUNTIME_NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET)-runtime ./deeplearn_base
 
 #build/%:
 #ifeq ($(notdir $@), deeplearn_base)
