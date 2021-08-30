@@ -32,16 +32,47 @@ build-pytorch:
 build-pytorch-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_pytorch/Dockerfile.build  -t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
 
-build-opencv: 
+# original one
+build-opencv-old: 
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
 
-#build-opencv-runtime:
-#	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET)-runtime ./deeplearn_minimal
+# the runtime one
+# we need to work on the docker runtime as the cmake command is running the python install
+# 
+build-opencv-prereq:
+	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	-t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
+	
+	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	-f deeplearn_opencv/Dockerfile_opencv_base \
+	-t $(OWNER)/deeplearn_opencv_base:$(CUDA_TARGET) ./deeplearn_opencv
+
+
+build-opencv-runtime:
+	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
+	-t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET)-runtime ./deeplearn_minimal
+	
+	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
+	-f deeplearn_opencv/Dockerfile_opencv_base \
+	-t $(OWNER)/deeplearn_opencv_base:$(CUDA_TARGET)-runtime ./deeplearn_opencv
+
+	docker build --build-arg DEVEL_CUDA=$(CUDA_TARGET) \
+	--build-arg RUNTIME_CUDA=$(CUDA_TARGET)-runtime \
+	-f deeplearn_opencv/Dockerfile_runtime \
+	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-runtime ./deeplearn_opencv
+
+# the devel one
+build-opencv:
+	docker build --build-arg DEVEL_CUDA=$(CUDA_TARGET) \
+	--build-arg RUNTIME_CUDA=$(CUDA_TARGET) \
+	-f deeplearn_opencv/Dockerfile_runtime \
+	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
 
 #docker build --build-arg CUDA=$(CUDA_TARGET)-runtime -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
 # docker-opencv-cv-base build
 # docker-opencv-multistage build
+
 
 build-base:
 	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET) ./deeplearn_base
