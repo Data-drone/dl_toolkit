@@ -1,0 +1,59 @@
+ARG CUDA
+
+FROM datadrone/deeplearn_minimal:$CUDA
+
+LABEL maintainer="Brian Law <bpl.law@gmail.com>"
+
+USER $NB_USER 
+
+RUN conda create --name computer_vision python=3.8 ipykernel numpy scipy matplotlib scikit-image scikit-learn openblas
+SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
+# C++ Jupyter kernel for interfacing with opencv
+# triggers a lot of compatability issues
+#RUN conda install -y xeus-cling -c conda-forge
+
+USER root
+
+# essentials
+RUN apt-get update && \
+    apt-get -y install unzip pkg-config
+
+# image and io libraries
+RUN apt-get -y install libjpeg-dev libpng-dev libtiff-dev && \
+    apt-get -y install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev && \
+    apt-get -y install libxvidcore-dev libx264-dev && \
+    apt-get -y install libxine2-dev 
+
+# c++ threading
+RUN apt-get -y install libtbb2 libtbb-dev
+
+# backend
+RUN apt-get -y install libgtk-3-dev
+
+# math optimisations
+RUN apt-get -y install libatlas-base-dev gfortran && \
+    apt-get -y install liblapack-dev libopenblas-dev liblapacke-dev
+
+
+# do we need?
+WORKDIR  /usr/include/linux
+RUN sudo ln -s -f ../libv4l1-videodev.h videodev.h
+
+RUN apt-get -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
+    apt-get -y install qt5-default && \
+    apt-get -y install libfaac-dev libmp3lame-dev libtheora-dev && \
+    apt-get -y install libvorbis-dev libxvidcore-dev && \
+    apt-get -y install libopencore-amrnb-dev libopencore-amrwb-dev && \
+    apt-get -y install libavresample-dev && \
+    apt-get -y install v4l-utils libglib2.0-0
+
+# Optional dependencies
+RUN apt-get -y install libprotobuf-dev protobuf-compiler && \
+    apt-get -y install libgoogle-glog-dev libgflags-dev && \
+    apt-get -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+
+WORKDIR /opt
+
+WORKDIR $HOME
+
+USER $NB_USER
