@@ -29,6 +29,10 @@ build-tf-compile:
 build-pytorch:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET) ./deeplearn_pytorch
 
+build-pytorch-runtime:
+	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
+	-t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-runtime ./deeplearn_pytorch
+
 build-pytorch-compile:
 	docker build --build-arg CUDA=$(CUDA_TARGET) -f deeplearn_pytorch/Dockerfile.build  -t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
 
@@ -69,16 +73,16 @@ build-opencv:
 	-f deeplearn_opencv/Dockerfile_runtime \
 	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
 
-#docker build --build-arg CUDA=$(CUDA_TARGET)-runtime -t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
-# docker-opencv-cv-base build
-# docker-opencv-multistage build
-
 
 build-base:
 	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET) ./deeplearn_base
+	./deeplearn_base/tag/tag_script.sh $(OWNER)/deeplearn_base:$(CUDA_TARGET) $(OWNER)/deeplearn_base 
 
 build-base-runtime:
 	docker build --build-arg BASE_CONTAINER=$(RUNTIME_NVIDIA_BASE) -t $(OWNER)/deeplearn_base:$(CUDA_TARGET)-runtime ./deeplearn_base
+
+test-base:
+	TEST_IMAGE=$(OWNER)/deeplearn_base:$(CUDA_TARGET) pytest -m "not info" deeplearn_base/test
 
 #build/%:
 #ifeq ($(notdir $@), deeplearn_base)
