@@ -84,6 +84,9 @@ build-base-runtime:
 test-base:
 	TEST_IMAGE=$(OWNER)/deeplearn_base:$(CUDA_TARGET) pytest -m "not info" deeplearn_base/test
 
+test/%:
+	TEST_IMAGE=$(OWNER)/$(notdir $@):$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO $(notdir $@)/test
+
 #build/%:
 #ifeq ($(notdir $@), deeplearn_base)
 #	docker build --build-arg BASE_CONTAINER=$(NVIDIA_BASE) -t $(OWNER)/$(notdir $@):latest ./$(notdir $@) 
