@@ -6,6 +6,21 @@ LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 USER $NB_USER 
 
+# cmake needed for some c++ tools
+ENV CMAKE_VERSION=3.21.1 \
+    CMAKE_MAJOR=3.21
+
+WORKDIR /opt/
+RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    chmod 755 cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    mkdir /opt/cmake
+
+RUN ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/opt/cmake
+
+RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake && \
+    rm cmake-${CMAKE_VERSION}-linux-x86_64.sh
+
+
 RUN conda create --name computer_vision python=3.8 ipykernel numpy scipy matplotlib scikit-image scikit-learn openblas
 SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
 # C++ Jupyter kernel for interfacing with opencv

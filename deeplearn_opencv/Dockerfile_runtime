@@ -6,6 +6,20 @@ FROM datadrone/deeplearn_opencv_base:$DEVEL_CUDA AS builder
 USER root
 WORKDIR /opt
 
+# cmake needed for some c++ tools
+ENV CMAKE_VERSION=3.21.1 \
+    CMAKE_MAJOR=3.21
+
+RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    chmod 755 cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    mkdir /opt/cmake
+
+RUN ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/opt/cmake
+
+RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake && \
+    rm cmake-${CMAKE_VERSION}-linux-x86_64.sh
+
+
 # build opencv
 ENV OPENCV_VERSION="4.5.3"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
