@@ -35,6 +35,9 @@ WORKDIR $HOME
 # Create alternative for nano -> nano-tiny
 RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 
+# I think we need to run this as user to avoid site-packages under root
+USER $NB_UID
+
 # Activate some jupyter extensions
 RUN conda install -n base -c conda-forge jupyterlab_widgets
 RUN jupyter labextension install @jupyterlab/celltags
