@@ -2,11 +2,11 @@
 
 SHELL:=bash
 # docker pull nvidia/cuda:11.1.1-cudnn8-devel
-NVIDIA_LITE:=nvidia/cuda:11.1.1-base
-RUNTIME_NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-runtime
+NVIDIA_LITE:=nvidia/cuda:11.1.1-base-ubuntu20.04
+RUNTIME_NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
 
 # should rename NVIDIA base but need to keep for compatability for now
-NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-devel
+NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-devel-ubuntu20.04
 CUDA_TARGET:=cuda-11.1
 
 OWNER:=datadrone
@@ -30,7 +30,10 @@ build-base:
 	$(OWNER)/deeplearn_base:$(CUDA_TARGET) \
 	$(OWNER)/deeplearn_base
 
-
+# TEST_IMAGE=$(OWNER)/deeplearn_base:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_base/test
+test-base:
+	TEST_IMAGE=$(OWNER)/base-notebook:latest pytest -m "not info" --log-cli-level=INFO deeplearn_base/test
+	
 build-minimal:
 	docker build --build-arg CUDA=$(CUDA_TARGET) \
 	-t $(OWNER)/deeplearn_minimal:$(CUDA_TARGET) ./deeplearn_minimal
