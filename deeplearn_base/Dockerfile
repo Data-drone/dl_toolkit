@@ -109,6 +109,8 @@ RUN set -x && \
 RUN mamba install --quiet --yes \
     'notebook' \
     'jupyterhub' \
+    'nb_conda_kernels' \
+    'jupyterlab_widgets' \
     'jupyterlab' && \
     mamba clean --all -f -y && \
     npm cache clean --force && \
