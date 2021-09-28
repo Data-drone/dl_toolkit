@@ -81,6 +81,19 @@ USER $NB_USER
 FROM datadrone/deeplearn_opencv_base:$RUNTIME_CUDA AS runtime
 ENV OPENCV_VERSION="4.5.3"
 COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/cmake_binary /opt/opencv-${OPENCV_VERSION}/cmake_binary
+# we need this /opt/opencv-4.5.3/include
+# we need this /opt/opencv-4.5.3/modules/core/include
+# we needed this for mxnet
+COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/include /opt/opencv-${OPENCV_VERSION}/include
+COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules /opt/opencv-${OPENCV_VERSION}/modules
+#COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules/core/include /opt/opencv-${OPENCV_VERSION}/modules/core/include
+## /opt/opencv-4.5.3/modules/flann/include
+#COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules/flann/include /opt/opencv-${OPENCV_VERSION}/modules/flann/include
+## /opt/opencv-4.5.3/modules/imgproc/include
+#COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules/imgproc/include /opt/opencv-${OPENCV_VERSION}/modules/imgproc/include
+#COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules/highgui/include /opt/opencv-${OPENCV_VERSION}/modules/highgui/include
+#COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/modules/imgcodecs/include /opt/opencv-${OPENCV_VERSION}/modules/imgcodecs/include
+COPY --from=builder --chown=$NB_USER:users /opt/opencv_contrib-${OPENCV_VERSION} /opt/opencv_contrib-${OPENCV_VERSION}
 SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
 
 WORKDIR $HOME

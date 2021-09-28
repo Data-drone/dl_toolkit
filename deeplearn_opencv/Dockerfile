@@ -4,10 +4,10 @@ FROM datadrone/deeplearn_minimal:$CUDA
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
-USER $NB_USER 
+USER root
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.21.1 \
+ENV CMAKE_VERSION=3.21.3 \
     CMAKE_MAJOR=3.21
 
 WORKDIR /opt/
@@ -20,6 +20,7 @@ RUN ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/opt/cmake
 RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake && \
     rm cmake-${CMAKE_VERSION}-linux-x86_64.sh
 
+USER $NB_USER
 
 RUN conda create --name computer_vision python=3.8 ipykernel numpy scipy matplotlib scikit-image scikit-learn openblas
 SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
