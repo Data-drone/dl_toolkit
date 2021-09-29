@@ -1,0 +1,30 @@
+FROM ubuntu:20.04
+
+# nvidia package repositories
+USER root
+
+RUN apt-get update && \
+    apt-get install -y wget gnupg software-properties-common
+
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin && \
+    mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub && \
+    add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" && \
+    apt-get update
+
+RUN wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb && \
+    apt install -y ./nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb && \
+    apt-get update
+
+RUN wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libnvinfer7_7.2.3-1+cuda11.1_amd64.deb && \
+    apt install -y ./libnvinfer7_7.2.3-1+cuda11.1_amd64.deb && \
+    apt-get update
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --allow-downgrades --no-install-recommends \
+    cuda-11-1 \
+    libcudnn8=8.0.5.39-1+cuda11.1  \
+    libcudnn8-dev=8.0.5.39-1+cuda11.1
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libnvinfer8=8.0.0-1+cuda11.0 \
+    libnvinfer-dev=8.0.0-1+cuda11.0 \
+    libnvinfer-plugin8=8.0.0-1+cuda11.0
