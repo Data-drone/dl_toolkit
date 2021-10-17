@@ -32,7 +32,7 @@ build-base:
 
 # TEST_IMAGE=$(OWNER)/deeplearn_base:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_base/test
 test-base:
-	TEST_IMAGE=$(OWNER)/base-notebook:latest pytest -m "not info" --log-cli-level=INFO deeplearn_base/test
+	TEST_IMAGE=$(OWNER)/deeplearn_base:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_base/test
 	
 build-minimal:
 	docker build --build-arg CUDA=$(CUDA_TARGET) \
@@ -48,37 +48,76 @@ build-minimal:
 	$(OWNER)/deeplearn_minimal:$(CUDA_TARGET) \
 	$(OWNER)/deeplearn_minimal
 
+test-minimal:
+	TEST_IMAGE=$(OWNER)/deeplearn_minimal:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_minimal/test
+	TEST_IMAGE=$(OWNER)/deeplearn_minimal:$(CUDA_TARGET)-runtime pytest -m "not info" --log-cli-level=INFO deeplearn_minimal/test
+	TEST_IMAGE=$(OWNER)/deeplearn_minimal:$(CUDA_TARGET)-base pytest -m "not info" --log-cli-level=INFO deeplearn_minimal/test
+
 build-opencv:	
+# building the common base image
 	docker build --build-arg CUDA=$(CUDA_TARGET) \
 	-f deeplearn_opencv/Dockerfile_opencv_base \
 	-t $(OWNER)/deeplearn_opencv_base:$(CUDA_TARGET) ./deeplearn_opencv
 
+# building the runtime image
 	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
 	-f deeplearn_opencv/Dockerfile_opencv_base \
 	-t $(OWNER)/deeplearn_opencv_base:$(CUDA_TARGET)-runtime ./deeplearn_opencv
 
+# building an opencv runtime  
 	docker build --build-arg DEVEL_CUDA=$(CUDA_TARGET) \
 	--build-arg RUNTIME_CUDA=$(CUDA_TARGET)-runtime \
 	-f deeplearn_opencv/Dockerfile_runtime \
 	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-runtime ./deeplearn_opencv
 
+# building an opencv devel image
 	docker build --build-arg DEVEL_CUDA=$(CUDA_TARGET) \
 	--build-arg RUNTIME_CUDA=$(CUDA_TARGET) \
 	-f deeplearn_opencv/Dockerfile_runtime \
 	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET) ./deeplearn_opencv
-
+	
 	TEST_IMAGE=$(OWNER)/deeplearn_opencv:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_opencv/test
 	TEST_IMAGE=$(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-runtime pytest -m "not info" --log-cli-level=INFO deeplearn_opencv/test
+
+build-opencv-slim:
+# build a base image 
+	docker build --build-arg CUDA=$(CUDA_TARGET)-base \
+	-f deeplearn_opencv/Dockerfile_opencv_base \
+	-t $(OWNER)/deeplearn_opencv_base:$(CUDA_TARGET)-base ./deeplearn_opencv
+
+# leverage the previous devel image to compile for base
+	docker build --build-arg DEVEL_CUDA=$(CUDA_TARGET) \
+	--build-arg RUNTIME_CUDA=$(CUDA_TARGET)-base \
+	-f deeplearn_opencv/Dockerfile_runtime \
+	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-base ./deeplearn_opencv
+
 
 test-opencv:
 	TEST_IMAGE=$(OWNER)/deeplearn_opencv:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_opencv/test
 	TEST_IMAGE=$(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-runtime pytest -m "not info" --log-cli-level=INFO deeplearn_opencv/test
 
+compile-opencv:
+	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	-f deeplearn_opencv/Dockerfile \
+	-t $(OWNER)/deeplearn_opencv:$(CUDA_TARGET)-build ./deeplearn_opencv
+
+# Build mxnet direct on opencv image
+build-mxnet:
+	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	--build-arg BASE_IMAGE=datadrone/deeplearn_opencv \
+	-t $(OWNER)/deeplearn_mxnet_build:$(CUDA_TARGET) ./deeplearn_mxnet
+
+test-mxnet:
+	TEST_IMAGE=$(OWNER)/deeplearn_mxnet_build:$(CUDA_TARGET) \
+	pytest -m "not info" --log-cli-level=INFO deeplearn_mxnet/test
+
 build-pytorch:
 	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	-f deeplearn_pytorch/Dockerfile \
 	-t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET) ./deeplearn_pytorch
 
 	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
+	-f deeplearn_pytorch/Dockerfile \
 	-t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-runtime ./deeplearn_pytorch
 
 tag-pytorch:
@@ -91,15 +130,20 @@ tag-pytorch:
 	$(OWNER)/deeplearn_pytorch
 
 test-pytorch:
-	TEST_IMAGE=$(OWNER)/deeplearn_pytorch:$(CUDA_TARGET) pytest -m "not info" --log-cli-level=INFO deeplearn_pytorch/test
-	TEST_IMAGE=$(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-runtime pytest -m "not info" --log-cli-level=INFO deeplearn_pytorch/test
+	TEST_IMAGE=$(OWNER)/deeplearn_pytorch:$(CUDA_TARGET) \
+	pytest -m "not info" --log-cli-level=INFO deeplearn_pytorch/test
+	
+	TEST_IMAGE=$(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-runtime \
+	pytest -m "not info" --log-cli-level=INFO deeplearn_pytorch/test
 	
 # we build tf into pytorch image as that is how we are usually using it
 build-tf:
 	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	--build-arg BASE_IMAGE=datadrone/deeplearn_opencv \
 	-t $(OWNER)/deeplearn_tf:$(CUDA_TARGET) ./deeplearn_tf
 	
 	docker build --build-arg CUDA=$(CUDA_TARGET)-runtime \
+	--build-arg BASE_IMAGE=datadrone/deeplearn_opencv \
 	-t $(OWNER)/deeplearn_tf:$(CUDA_TARGET)-runtime ./deeplearn_tf
 
 tag-tf:
@@ -122,9 +166,13 @@ compile-build-tf:
 	-t $(OWNER)/deeplearn_tf:latest ./deeplearn_pytorch
 
 compile-pytorch:
-	docker build --build-arg CUDA=$(CUDA_TARGET) \
+	docker build --build-arg CUDA=$(CUDA_TARGET)-build \
+	--build-arg BASE_IMAGE=datadrone/deeplearn_opencv \
 	-f deeplearn_pytorch/Dockerfile.build  \
-	-t $(OWNER)/deeplearn_pytorch:latest ./deeplearn_pytorch
+	-t $(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-build ./deeplearn_pytorch
+
+	TEST_IMAGE=$(OWNER)/deeplearn_pytorch:$(CUDA_TARGET)-build \
+	pytest -m "not info" --log-cli-level=INFO deeplearn_pytorch/test
 
 build-lite-mxnet:
 	docker build \
@@ -136,8 +184,8 @@ build-lite-mxnet:
 # but the bash script does cd in...
 # remove the bash scripts and go fully into using the make?
 
-build-mxnet:
-	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_mxnet:$(CUDA_TARGET) ./deeplearn_mxnet
+#build-mxnet:
+#	docker build --build-arg CUDA=$(CUDA_TARGET) -t $(OWNER)/deeplearn_mxnet:$(CUDA_TARGET) ./deeplearn_mxnet
 
 
 
