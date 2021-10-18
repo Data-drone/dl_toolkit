@@ -25,7 +25,7 @@ RUN git clone https://github.com/tensorflow/tensorflow.git
 
 WORKDIR /opt/tensorflow
 
-RUN git checkout tags/v2.4.1 -b r2.4
+RUN git checkout r2.6
 
 # need search paths 
 # /usr/include for nccl
@@ -41,7 +41,7 @@ ENV TF_NEED_OPENCL_SYCL=0
 ENV TF_NEED_ROCM=0
 ENV TF_NEED_CUDA=1
 ENV TF_NEED_TENSORRT=0
-ENV TF_CUDA_VERSION=11.2
+ENV TF_CUDA_VERSION=11.1
 ENV TF_CUDNN_VERSION=8
 ENV TF_NCCL_VERSION=2.8.4
 ENV TF_CUDA_CLANG=0
