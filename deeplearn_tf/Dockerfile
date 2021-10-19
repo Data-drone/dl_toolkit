@@ -21,7 +21,14 @@ RUN pip install tensorflow
 ## Add trax and jax and flax stuff
 RUN pip install --upgrade "jax[cuda111]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
 RUN pip install flax
-RUN pip install -q -U trax
+
+## need to debug this
+COPY trax.py trax.py
+RUN python trax.py
+RUN rm trax.py
+
+## this is a hack should really solve upstream
+RUN pip install -U numpy
 
 USER $NB_USER
 WORKDIR $HOME
