@@ -20,7 +20,7 @@ def test_pytorch_version(container):
     rv = c.wait(timeout=30)
     logs = c.logs(stdout=True).decode("utf-8")
     LOGGER.info(logs)
-    assert '1.9' in logs
+    assert '1.10' in logs
     #assert cmd.exit_code == 0, f"Command {command} failed {output}"
 
 
