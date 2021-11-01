@@ -36,8 +36,10 @@ RUN mkdir /opt/jovyan && \
 WORKDIR /opt/jovyan
 USER $NB_USER
 
-# torchvision 0.10.0 is bringing in pytorch 1.6.0 if installed with conda 
+# torchvision can take advantage of pillow-simd if there on compile
+RUN pip install pillow-simd
 
+# torchvision 0.10.0 is bringing in pytorch 1.6.0 if installed with conda 
 #RUN conda install -n computer_vision torchvision -c pytorch
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
@@ -54,7 +56,7 @@ RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/
 RUN pip install wandb pytorch-lightning && \
     pip install torchmetrics && \
     pip install lightning-bolts && \
-    pip install six Pillow matplotlib scikit-image imageio && \
+    pip install six matplotlib scikit-image imageio && \
     pip install --no-dependencies imgaug && \
     pip install PyYAML && \
     pip install --no-dependencies albumentations
