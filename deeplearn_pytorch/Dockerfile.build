@@ -1,54 +1,72 @@
 ARG CUDA
-FROM datadrone/deeplearn_opencv:$CUDA
+ARG BASE_IMAGE=datadrone/deeplearn_opencv
+
+FROM $BASE_IMAGE:$CUDA
 
 LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 
 WORKDIR /opt
 USER root
 
-ENV TORCH_CUDA_ARCH_LIST=7.5
-ENV FORCE_CUDA=1
+##############################################
+#########   Clone Reports as root 
+##############################################
 
-RUN conda install -n computer_vision -y magma-cuda110 -c pytorch 
-
-# need to add in magma  
-# added test for enabling opencv integration
-
-SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
-
-RUN echo "conda activate computer_vision"
-ENV CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
-ENV USE_CUDA=1
 RUN git clone --recursive https://github.com/pytorch/pytorch && \
     cd pytorch && \
-    git checkout tags/v1.7.1 -b release/1.7 && \
+    git checkout release/1.9 && \
     git submodule sync && \
-    git submodule update --init --recursive && \
-    USE_OPENCV=1 python setup.py install
+    git submodule update --init --recursive 
 
-#RUN conda install -c pytorch captum
-# need to do manual in order to make sure that we don't change pytorch versions
-RUN conda install -n computer_vision -c conda-forge yarn
+RUN git clone https://github.com/pytorch/vision.git && \
+    cd vision && \
+    git checkout release/0.10
 
 RUN git clone https://github.com/pytorch/captum.git && \
     cd captum && \
-    git checkout tags/v0.3.1 -b v0.3.1 && \
-    pip install -e .[insights]
+    git checkout v0.4.0
 
-WORKDIR /opt
 
-#RUN conda install -n computer_vision torchvision -c pytorch
-RUN git clone https://github.com/pytorch/vision.git && \
-    cd vision && \
-    git checkout tags/v0.8.2 -b release/0.8.0 && \
-    python setup.py install
+##############################################
+#########   Change ownership 
+##############################################
 
-# RUN conda install -c pytorch -c fastai fastai
+RUN chown -R jovyan:users /opt/pytorch
+RUN chown -R jovyan:users /opt/vision
+RUN chown -R jovyan:users /opt/captum
 
-# Dali plugin
+##############################################
+#########   Switch back to NB_USER for installation 
+##############################################
+
+USER $NB_USER
+
+RUN conda install -n computer_vision -y magma-cuda111 -c pytorch
+
+SHELL ["conda", "run", "-n", "computer_vision", "/bin/bash", "-c"]
+RUN echo "conda activate computer_vision"
+
+ENV CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+ENV TORCH_CUDA_ARCH_LIST=7.5
+ENV FORCE_CUDA=1
+ENV USE_CUDA=1
+
+WORKDIR /opt/pytorch
+
+RUN pip install typing_extensions && \
+    USE_OPENCV=1 python setup.py install
+
+RUN conda install -n computer_vision -c conda-forge yarn
+
+WORKDIR /opt/captum
+
+RUN pip install -e .[insights]
+
+WORKDIR /opt/vision
+
+RUN python setup.py install
+
 RUN pip install --extra-index-url https://developer.download.nvidia.com/compute/redist nvidia-dali-cuda110
-
-WORKDIR /opt
 
 RUN pip install wandb pytorch-lightning && \
     pip install six Pillow matplotlib scikit-image imageio && \
