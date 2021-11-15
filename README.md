@@ -2,6 +2,28 @@
 
 Some docker containers for experimenting with deep learning.
 
+Nvidia provides three types of images for each os / cuda version.
+- base: Includes the CUDA runtime (cudart)
+- runtime: Builds on the base and includes the CUDA math libraries, and NCCL. A runtime image that also includes cuDNN is available.
+- devel: Builds on the runtime and includes headers, development tools for building CUDA images. These images are particularly useful for multi-stage builds. 
+
+See: https://hub.docker.com/r/nvidia/cuda
+
+The idea of these images is to rebase the jupyter stack docker iamges:
+See: https://github.com/jupyter/docker-stacks 
+with a Nvidia cuda base for the purposes of experimenting with deeplearning and other GPU based ML things.
+
+# Images
+
+- deeplearn base:
+  - Mirrors jupyter-stack base-notebook with cuda base image
+
+- deeplearn minimal:
+  - Mirrors jupyter-stack minimal-notebook with cuda base image
+
+- deeplearn_opencv:
+  - Opencv can be hard to install and configure properly especially to enable CUDA support as well.
+  - Builds a base image
 # Building:
 
 ```{bash}
