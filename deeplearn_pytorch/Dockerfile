@@ -8,6 +8,9 @@ LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 WORKDIR /opt
 USER $NB_USER
 
+SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
+
+RUN conda install -y -c conda-forge ipywidgets IProgress
 #RUN conda install -n computer_vision -y magma-cuda111 -c pytorch 
 # need to add in magma  
 
