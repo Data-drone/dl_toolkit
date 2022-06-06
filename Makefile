@@ -2,12 +2,12 @@
 
 SHELL:=bash
 # docker pull nvidia/cuda:11.1.1-cudnn8-devel
-NVIDIA_LITE:=nvidia/cuda:11.1.1-base-ubuntu20.04
-RUNTIME_NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
+NVIDIA_LITE:=nvidia/cuda:11.3.1-base-ubuntu20.04
+RUNTIME_NVIDIA_BASE:=nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu20.04
 
 # should rename NVIDIA base but need to keep for compatability for now
-NVIDIA_BASE:=nvidia/cuda:11.1.1-cudnn8-devel-ubuntu20.04
-CUDA_TARGET:=cuda-11.1
+NVIDIA_BASE:=nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
+CUDA_TARGET:=cuda-11.3
 
 OWNER:=datadrone
 
