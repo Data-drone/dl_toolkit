@@ -7,8 +7,8 @@ LABEL maintainer="Brian Law <bpl.law@gmail.com>"
 USER root
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.21.3 \
-    CMAKE_MAJOR=3.21
+ENV CMAKE_VERSION=3.23.2 \
+    CMAKE_MAJOR=3.23
 
 WORKDIR /opt/
 RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
@@ -71,7 +71,7 @@ RUN apt-get -y install libprotobuf-dev protobuf-compiler && \
 WORKDIR /opt
 
 # build opencv
-ENV OPENCV_VERSION="4.5.3"
+ENV OPENCV_VERSION="4.5.5"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && wget -O opencv_contrib.zip  https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \

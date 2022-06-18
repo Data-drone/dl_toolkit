@@ -7,8 +7,8 @@ USER root
 WORKDIR /opt
 
 # cmake needed for some c++ tools
-ENV CMAKE_VERSION=3.21.1 \
-    CMAKE_MAJOR=3.21
+ENV CMAKE_VERSION=3.23.2 \
+    CMAKE_MAJOR=3.23
 
 RUN wget https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod 755 cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
@@ -21,7 +21,7 @@ RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake && \
 
 
 # build opencv
-ENV OPENCV_VERSION="4.5.3"
+ENV OPENCV_VERSION="4.5.5"
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && wget -O opencv_contrib.zip  https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
@@ -79,7 +79,7 @@ USER $NB_USER
 ##################################### 2nd stage
 
 FROM datadrone/deeplearn_opencv_base:$RUNTIME_CUDA AS runtime
-ENV OPENCV_VERSION="4.5.3"
+ENV OPENCV_VERSION="4.5.5"
 COPY --from=builder --chown=$NB_USER:users /opt/opencv-${OPENCV_VERSION}/cmake_binary /opt/opencv-${OPENCV_VERSION}/cmake_binary
 # we need this /opt/opencv-4.5.3/include
 # we need this /opt/opencv-4.5.3/modules/core/include
